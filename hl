@@ -1,0 +1,7 @@
+#!/bin/bash
+
+hl_count=`ps | grep -v ps | grep hl | wc -l`;
+color_num=`expr $hl_count - 1`;
+
+GREP_COLOR="01;3$color_num" egrep --color=always "^|$1"
+

@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+
+script_name=$(basename $0)
+
+. colors
+
+config_file=$script_name
+config_folder=${XDG_CONFIG_HOME:-"$HOME/.config"}
+
+info.about() {
+    echo
+    echo "${green}slack-send$reset - sends message to Slack channel via incoming webhook"
+    echo
+}
+info.usage() {
+    echo "${underline}${yellow}Usage$reset:"
+    echo "    slack-send <message>"
+    echo "    ${yellow}arguments$reset:"
+    echo "        ${green}message$reset     Message text to sent to Slack"
+    echo
+}
+info.configure() {
+    echo "${underline}${yellow}Configure$reset:"
+    echo "    You have to place $yellow\`$config_file\`$reset file into your $yellow\`$config_folder/\`$reset folder & set config variables"
+    echo "    ${yellow}variables$reset:"
+    echo "        ${green}hook_url$reset     Incoming webhook url. Similar to https://hooks.slack.com/services/Txxxxxxxx/Bxxxxxxxx/xxxxxxxxxxxxxxxxxxxxxxxx"
+    echo
+}
+info.help() {
+    echo "${underline}${yellow}Help$reset:"
+    echo "    To get started you need to create your ${bold}Incoming webhook$reset in Slack's admin or copy existing one into config."
+    echo "    To create new ${bold}Incoming webhook$reset visit ${underline}https://my.slack.com/services/new/incoming-webhook$reset."
+    echo
+}
+info.full() {
+    info.about
+    info.usage
+    info.configure
+    info.help
+}
+info.error() {
+    echo
+    echo "${underline}${lightred}Error$reset${lightred}: $@$reset"
+    echo
+}
+
+
+if [ $# -ne 1 ]; then # if count of args != 1
+    info.full
+    exit 1
+fi
+
+if [ ! -f "$config_folder/$config_file" ]; then
+    info.error "Configuration file not found"
+    info.configure
+    info.help
+    exit 2;
+fi
+
+. "$config_folder/$config_file"
+
+input=$1
+data="payload={\"text\": \"$input\"}"
+curl \
+    -X POST \
+    --data-urlencode "$data" \
+    $hook_url
+

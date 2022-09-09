@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+. colors
+
+branch=$1;
+if [[ "$branch" = "" ]]; then
+  branch='master';
+fi
+
+c.header 'git status';
+git status;
+c.header "checkout $branch";
+git checkout $branch;
+c.header 'pull from upstream';
+git pull upstream $branch;
+c.header 'push to my origin';
+git push;
+

@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+if [[ $# == 0 || $1 == '--help' ]]; then
+    . colors
+    echo "${yellow}Usage$reset:"
+    echo "    `basename $0` { ${green}<${reset}connection-name${green}>${reset} | --help }"
+    echo
+    echo "${yellow}Arguments$reset:"
+    echo "    ${green}connection-name$reset     Name of connection. Use ${yellow}\`nmcli connection show\`${reset} to list connections."
+
+    exit 1;
+fi
+
+connectionName=$1;
+
+active=`nmcli connection show --active | grep $connectionName`;
+
+if [[ $active ]]; then
+    exit 0;
+fi
+
+silent=`nmcli connection up $connectionName`
+error=$?
+if [[ $error ]]; then
+    echo $silent;
+    exit $error;
+fi

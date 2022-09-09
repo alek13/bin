@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+. colors
+
+if [[ $# == 0 ]]; then
+    gh pr list;
+    exit 1;
+fi
+
+git status
+c.askContinue "Continue";
+
+
+prNumber=$1
+repoOwner=`gh pr view $prNumber --json headRepositoryOwner --jq .headRepositoryOwner.login`
+branch=`gh pr view $prNumber --json headRefName --jq .headRefName`
+branchTo=`gh pr view $prNumber --json baseRefName --jq .baseRefName`
+
+gup $branchTo
+
+git fetch $repoOwner
+
+c.header "git merge $repoOwner/$branch --no-ff --no-commit"
+git merge $repoOwner/$branch --no-ff --no-commit
