@@ -3,7 +3,12 @@
 . colors
 
 if [[ $# == 0 ]]; then
-    gh pr list;
+    c.header 'no review:'
+    gh pr list -S review:none;
+    c.header 'approved, not merged:'
+    gh pr list -S review:approved;
+    c.header 'other:'
+    gh pr list -S '-review:none -review:approved';
     exit 1;
 fi
 
