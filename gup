@@ -12,7 +12,7 @@ git status;
 c.header "checkout $branch";
 git checkout $branch;
 c.header 'pull from upstream';
-git pull upstream $branch;
+git pull upstream $branch --tags;
 c.header 'push to my origin';
 git push;
 
