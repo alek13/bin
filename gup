@@ -1,10 +1,17 @@
 #!/usr/bin/env bash
+set -e
 
 . colors
 
+function getDefaultBranch() {
+  local upstreamName;
+  upstreamName=$(git remote | grep -E -o '(upstream|origin)' | tail -1)
+  git remote show "$upstreamName" | sed -n '/HEAD branch/s/.*: //p'
+}
+
 branch=$1;
 if [[ "$branch" = "" ]]; then
-  branch='master';
+  branch=$(getDefaultBranch);
 fi
 
 c.header 'git status';
@@ -12,7 +19,7 @@ git status;
 c.header "checkout $branch";
 git checkout $branch;
 c.header 'pull from upstream';
-git pull upstream $branch --tags;
+git pull upstream $branch --tags --recurse-submodules;
 c.header 'push to my origin';
 git push;
 
