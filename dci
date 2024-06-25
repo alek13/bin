@@ -4,8 +4,8 @@
 
 if [ $# -eq 0 ]; then
   c.warning 'Please specify service name. One of:';
-  docker-compose ps --services --all | while read line; do echo "${green}  • ${reset}$line"; done;
+  docker compose ps --services --all | while read line; do echo "${green}  • ${reset}$line"; done;
   exit 1;
 fi
 
-docker-compose exec $1 bash
+docker compose exec $1 bash

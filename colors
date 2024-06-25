@@ -63,6 +63,11 @@ c.note() {
 }
 
 
+c.askEnter() {
+    local question=$1
+    read -p "$question: " answer
+    echo "$answer"
+}
 
 c.askContinue() {
     local question=$1
