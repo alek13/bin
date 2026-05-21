@@ -36,11 +36,11 @@ c.arrow() {
 }
 
 c.success() {
-    printf "${green}✔ %s${reset}\n" "$@"
+    printf "${green}✅ %s${reset}\n" "$@"
 }
 
 c.error() {
-    printf "${red}✖ %s${reset}\n" "$@"
+    printf "${red}❌ %s${reset}\n" "$@"
 }
 
 c.warning() {
