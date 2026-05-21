@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+set -e
+
+. colors
+
+to_encrypt=$(c.askEnter 'What will be encrypted')
+encrypted=$(openssl enc -aes-256-cbc -a -salt -pbkdf2 <<< "$to_encrypt")
+
+echo '------------------------------------   Send this command to friend:   ---------------------------'
+echo "openssl enc -aes-256-cbc -d -a -salt -pbkdf2 <<< '${encrypted}'"
+echo '-------------------------------------------------------------------------------------------------'
+
